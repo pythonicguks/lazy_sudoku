@@ -2,11 +2,24 @@
 ALL_POSSIBLE_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 class SudokuGrid:
-    def __init__(self, cell_list=None):
+    def __init__(self, cell_list=None,mode_debug=False):
         if cell_list is None:
             self.cell_list = [SudokuCell() for _ in range(81)]
         elif isinstance(cell_list, list) and len(cell_list) == 81:
-            self.cell_list = cell_list
+            self.cell_list = list()
+            for cell in cell_list:
+                if isinstance(cell, SudokuCell):
+                    self.cell_list.append(cell)
+                elif (isinstance(cell, int) and cell in ALL_POSSIBLE_VALUES) or mode_debug:
+                    self.cell_list.append(SudokuCell(cell))
+                elif cell is None or cell == 0:
+                    self.cell_list.append(SudokuCell())
+                else:
+                    print(cell)
+                    assert False
+        else:
+            assert False
+        print(cell_list, type(cell_list), len(cell_list))
 
     def update_by_new_cell_value(self, cell_index):
         for family, family_index in self._get_families_indexes(cell_index):
@@ -59,16 +72,20 @@ class SudokuCell:
                 self.value = self.possible_values[0]
 
     def to_value_str(self):
-        if possible_values is None:
+        if self.possible_values is None:
             to_return = {str(self.value): "black"}
         else:
-            to_return = {str(self.value), "blue"}
+            if self.value is None:
+                to_return = {" ": "blue"}
+            else:
+                 to_return = {str(self.value): "blue"}
+        return to_return
 
     def to_possible_str(self):
-        if possible_values is None:
+        if self.possible_values is None:
            to_return = {str(self.value): "black"}
         else:
-           to_return = {str(digit): ("black" if digit in self.possible_value else None) for digit in ALL_POSSIBLE_VALUES}
+           to_return = {str(digit): ("black" if digit in self.possible_values else None) for digit in ALL_POSSIBLE_VALUES}
            if self.value is not None:
                to_return[str(self.value)] = "blue" if value in self.possible_values else "red"
         return to_return
