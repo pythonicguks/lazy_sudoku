@@ -2,7 +2,7 @@
 ALL_POSSIBLE_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 class SudokuGrid:
-    def __init__(self, cell_list=None,mode_debug=False):
+    def __init__(self, cell_list=None, mode_debug=False):
         if cell_list is None:
             self.cell_list = [SudokuCell() for _ in range(81)]
         elif isinstance(cell_list, list) and len(cell_list) == 81:
@@ -15,11 +15,9 @@ class SudokuGrid:
                 elif cell is None or cell == 0:
                     self.cell_list.append(SudokuCell())
                 else:
-                    print(cell)
                     assert False
         else:
             assert False
-        print(cell_list, type(cell_list), len(cell_list))
 
     def update_by_new_cell_value(self, cell_index):
         for family, family_index in self._get_families_indexes(cell_index):
@@ -29,16 +27,16 @@ class SudokuGrid:
 
     def _get_cells_from_family_index(self, family, index):
         if index <= 1 or index > 9:
-            raise(ValueError)
-        elif family == "line" :
+            raise ValueError
+        elif family == "line":
             cell_indexes_list = [i + (index - 1) * 9 for i in range(9)]
-        elif family == "col" :
+        elif family == "col":
             cell_indexes_list = [9 * i + index - 1 for i in range(9)]
-        elif family == "box" :
+        elif family == "box":
             offset = (index // 3 - 1) * 27
             cell_indexes_list = [index + offset + relatif_pos - 1 for relatif_pos in [0, 1, 2, 9, 10, 11, 18, 19, 20]]
         else:
-            raise(ValueError)
+            raise ValueError
         return cell_indexes_list
 
     def _get_families_indexes(self, cell_index):
@@ -78,18 +76,18 @@ class SudokuCell:
             if self.value is None:
                 to_return = {" ": "blue"}
             else:
-                 to_return = {str(self.value): "blue"}
+                to_return = {str(self.value): "blue"}
         return to_return
 
     def to_possible_str(self):
         if self.possible_values is None:
-           to_return = {str(self.value): "black"}
+            to_return = {str(self.value): "black"}
         else:
-           to_return = {str(digit): ("black" if digit in self.possible_values else None) for digit in ALL_POSSIBLE_VALUES}
-           if self.value is not None:
-               to_return[str(self.value)] = "blue" if value in self.possible_values else "red"
+            to_return = {str(digit): ("black" if digit in self.possible_values else None) for digit in ALL_POSSIBLE_VALUES}
+            if self.value is not None:
+                to_return[str(self.value)] = "blue" if self.value in self.possible_values else "red"
         return to_return
 
 class SudokuTechniques:
-      def __init__(self, value=None):
-          self.value = self.value
+    def __init__(self, value=None):
+        self.value = self.value
